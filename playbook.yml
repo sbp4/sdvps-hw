@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+
+  - name: Ensure that vim editor installed.
+    yum: name=vim state=present
+
+  - name: Change ssh config
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: '^PasswordAuthentication'
+      line: PasswordAuthentication yes
+    notify:
+      - Restart sshd
+
+  - name: print facts
+    debug:
+      msg: "{{ hostvars[inventory_hostname]['ansible_all_ipv4_addresses'] }}"
+
+  handlers:
+  - name: Restart sshd
+    service:
+      name: sshd
+      state: restarted
