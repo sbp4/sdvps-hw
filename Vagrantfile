@@ -9,7 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
    p.vm.host_name = "net1"
    
    p.vm.network  "public_network", bridge: "Intel(R) Dual Band Wireless-AC 8260", ip: "10.50.55.5"
-   p.vm.network  "private_network", ip: "192.200.21.5"
+   #p.vm.network  "private_network", ip: "192.200.21.5"
 
        p.vm.provider :virtualbox do |res|
 
@@ -24,7 +24,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
    b.vm.host_name = "net2"
    
    b.vm.network  "public_network", bridge: "Intel(R) Dual Band Wireless-AC 8260", ip: "10.50.55.10"
-   b.vm.network  "private_network", ip: "192.200.21.10"
+   #b.vm.network  "private_network", ip: "192.200.21.10"
 
       b.vm.provider :virtualbox do |res|
 

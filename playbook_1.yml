@@ -1,0 +1,61 @@
+---
+- name: play - 1
+  hosts: webservers
+  become: yes
+  gather_facts: no
+  tasks:
+
+  - name: download nginx
+    uri:
+      url: https://nginx.org/download/nginx-1.23.1.tar.gz
+      dest: /tmp
+
+  - name: create directory
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: vagrant
+      group: vagrant
+      mode: 0777
+    loop:
+      - '/home/vagrant/nginx'
+
+  - name: extract nginx.tar.gz into /home/vagrant/nginx
+    ansible.builtin.unarchive:
+      src: /tmp/nginx-1.23.1.tar.gz
+      dest: /home/vagrant/nginx
+      remote_src: yes
+
+- name: play - 2
+  hosts: webservers
+  become: yes
+  gather_facts: no
+  tasks:
+
+  - name: install tuned
+    yum:
+      name: tuned
+      state: present
+
+  - name: systemd reload
+    systemd:
+      daemon_reload: yes
+
+  - name: tuned enable
+    systemd:
+      name: tuned
+      enabled: yes
+
+- name: play -3
+  hosts: webservers
+  become: yes
+  gather_facts: no
+  tasks:
+
+  - name: change motd
+    lineinfile:
+      path: /etc/motd
+      line: Welcome to {{ inventory_hostname }}.
+      state: present
+
+...

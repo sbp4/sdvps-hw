@@ -96,7 +96,95 @@ Serial - ограничивает количество нод внутри од�
 
 *Приложите файлы с плейбуками и вывод выполнения.*
 
- ---
+---
+
+*** Ответ: ***
+
+'''
+---
+- name: play - 1
+  hosts: webservers
+  become: yes
+  gather_facts: no
+  tasks:
+
+  - name: download nginx
+    uri:
+      url: https://nginx.org/download/nginx-1.23.1.tar.gz
+      dest: /tmp
+
+  - name: create directory
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: vagrant
+      group: vagrant
+      mode: 0777
+    loop:
+      - '/home/vagrant/nginx'
+
+  - name: extract nginx.tar.gz into /home/vagrant/nginx
+    ansible.builtin.unarchive:
+      src: /tmp/nginx-1.23.1.tar.gz
+      dest: /home/vagrant/nginx
+      remote_src: yes
+
+- name: play - 2
+  hosts: webservers
+  become: yes
+  gather_facts: no
+  tasks:
+
+  - name: install tuned
+    yum:
+      name: tuned
+      state: present
+
+  - name: systemd reload
+    systemd:
+      daemon_reload: yes
+
+  - name: tuned enable
+    systemd:
+      name: tuned
+      enabled: yes
+
+- name: play -3
+  hosts: webservers
+  become: yes
+  gather_facts: no
+  tasks:
+
+  - name: change motd
+    lineinfile:
+      path: /etc/motd
+      line: Welcome to {{ inventory_hostname }}.
+      state: present
+
+...
+'''
+
+1. 
+
+<a href="https://ibb.co/8mXSGy5"><img src="https://i.ibb.co/10bwBCq/5-1-1.png" alt="5-1-1" border="0"></a>
+
+<a href="https://ibb.co/rGPgZ8f"><img src="https://i.ibb.co/JRLNz6F/5-1-2.png" alt="5-1-2" border="0"></a>
+
+<a href="https://ibb.co/hmnBhBR"><img src="https://i.ibb.co/BC7ydyV/5-1-3.png" alt="5-1-3" border="0"></a>
+
+2. 
+
+<a href="https://ibb.co/SdGqddn"><img src="https://i.ibb.co/7RL7RRW/5-2-1.png" alt="5-2-1" border="0"></a>
+
+<a href="https://ibb.co/bJ648xM"><img src="https://i.ibb.co/M6gz3bx/5-2-2.png" alt="5-2-2" border="0"></a>
+
+3.
+
+<a href="https://ibb.co/TLcqZm2"><img src="https://i.ibb.co/Kw6zYFh/5-3-1.png" alt="5-3-1" border="0"></a>
+
+<a href="https://ibb.co/0Qf15Nw"><img src="https://i.ibb.co/jHLqtKp/5-3-2.png" alt="5-3-2" border="0"></a>
+
+---
  
 **
 
@@ -112,7 +200,13 @@ Playbook должен в качестве приветствия установ�
 
 *Приложите файл с модифицированным плейбуком и вывод выполнения.*
 
- ---
+---
+
+*** Ответ: ***
+
+
+
+---
 
 ### Задание 7
 
@@ -125,3 +219,10 @@ Playbook должен в качестве приветствия установ�
 4. Сделать проверку доступности веб сайта(ответ 200).
 
 *Приложите архив с ролью и вывод выполнения.*
+
+---
+
+*** Ответ: ***
+
+
+---
